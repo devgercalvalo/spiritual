@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-playfair);
+}
+
+/* Contenido de posts renderizado desde Markdown */
+.prose-spiritual {
+  max-width: none;
+}
+.prose-spiritual h1,
+.prose-spiritual h2,
+.prose-spiritual h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+.prose-spiritual h1 {
+  font-size: 1.875rem;
+}
+.prose-spiritual h2 {
+  font-size: 1.5rem;
+}
+.prose-spiritual h3 {
+  font-size: 1.25rem;
+}
+.prose-spiritual p {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  line-height: 1.75;
+}
+.prose-spiritual ul,
+.prose-spiritual ol {
+  margin-top: 1em;
+  margin-bottom: 1em;
+  padding-left: 1.5rem;
+}
+.prose-spiritual ul {
+  list-style-type: disc;
+}
+.prose-spiritual ol {
+  list-style-type: decimal;
+}
+.prose-spiritual a {
+  color: var(--color-purple-700, #7e22ce);
+  text-decoration: underline;
+}
+.prose-spiritual blockquote {
+  border-left: 3px solid var(--color-purple-300, #d8b4fe);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-neutral-600, #525252);
+}
+.prose-spiritual img {
+  border-radius: 0.75rem;
+  margin-top: 1.5em;
+  margin-bottom: 1.5em;
+}
