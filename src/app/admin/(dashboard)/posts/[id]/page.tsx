@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { PostForm } from "@/components/admin/post-form";
 import { createClient } from "@/lib/supabase/server";
+import type { Post } from "@/types/database.types";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -17,7 +18,7 @@ export default async function EditPostPage({ params }: Props) {
 
   if (!post) notFound();
 
-  const { post_kits, ...postValues } = post as typeof post & { post_kits: { kit_id: string }[] };
+  const { post_kits, ...postValues } = post as Post & { post_kits: { kit_id: string }[] };
 
   return (
     <div className="flex flex-col gap-6">
