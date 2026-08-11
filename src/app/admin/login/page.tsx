@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -40,11 +41,16 @@ function LoginForm() {
         onSubmit={handleSubmit}
         className="flex w-full max-w-sm flex-col gap-4 rounded-xl border border-neutral-200 bg-white p-8 dark:border-neutral-800 dark:bg-neutral-900"
       >
-        <div className="mb-2 text-center">
-          <h1 className="font-display text-2xl font-semibold text-purple-800 dark:text-purple-300">
-            Sendero Espiritual
-          </h1>
-          <p className="text-sm text-neutral-500">Acceso al panel administrativo</p>
+        <div className="mb-2 flex flex-col items-center gap-3 text-center">
+          <span className="relative h-16 w-16 overflow-hidden rounded-full ring-4 ring-amber-300/80 dark:ring-amber-500/50">
+            <Image src="/images/san-charbel.jpg" alt="San Charbel Makhlouf" fill className="object-cover" sizes="64px" />
+          </span>
+          <div>
+            <h1 className="font-display text-2xl font-semibold text-purple-800 dark:text-purple-200">
+              Centro de Sanación San Charbel
+            </h1>
+            <p className="text-sm text-neutral-500">Acceso al panel administrativo</p>
+          </div>
         </div>
 
         <div className="flex flex-col gap-1.5">

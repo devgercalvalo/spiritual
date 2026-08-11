@@ -2,8 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
+import { KitActions } from "@/components/public/kit-actions";
 import { ProductCard } from "@/components/public/product-card";
 import { getKitBySlug } from "@/lib/data/public";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,7 +33,11 @@ export default async function KitPage({ params }: Props) {
         </div>
         <div className="flex flex-col gap-3">
           <h1 className="font-display text-3xl font-bold">{kit.name}</h1>
+          {kit.price > 0 && (
+            <p className="text-xl font-semibold text-purple-700">{formatCurrency(kit.price)}</p>
+          )}
           {kit.description && <p className="text-neutral-600 dark:text-neutral-400">{kit.description}</p>}
+          <KitActions kit={kit} />
         </div>
       </div>
 

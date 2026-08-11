@@ -22,15 +22,15 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Sendero Espiritual — Oraciones, rituales y sabiduría",
-    template: "%s | Sendero Espiritual",
+    default: "Centro de Sanación San Charbel — Oraciones, rituales y sabiduría",
+    template: "%s | Centro de Sanación San Charbel",
   },
   description:
-    "Oraciones, rituales, reflexiones y mensajes espirituales para tu camino de protección, abundancia y buena suerte.",
+    "Oraciones, rituales, reflexiones y mensajes espirituales para tu camino de protección, abundancia y buena suerte, bajo la intercesión de San Charbel Makhlouf.",
   openGraph: {
     type: "website",
     locale: "es_MX",
-    siteName: "Sendero Espiritual",
+    siteName: "Centro de Sanación San Charbel",
   },
   twitter: {
     card: "summary_large_image",

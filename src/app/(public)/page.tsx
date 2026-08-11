@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -17,9 +18,22 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col gap-16">
-      <section className="flex flex-col items-center gap-4 py-8 text-center">
-        <span className="text-sm font-medium uppercase tracking-widest text-purple-600">
-          Bienvenido a tu comunidad espiritual
+      <section className="flex flex-col items-center gap-5 py-10 text-center">
+        <div className="relative">
+          <div className="absolute inset-0 -z-10 scale-150 rounded-full bg-amber-300/30 blur-2xl dark:bg-amber-500/10" />
+          <div className="relative h-28 w-28 overflow-hidden rounded-full ring-4 ring-amber-300/80 ring-offset-4 ring-offset-neutral-50 sm:h-36 sm:w-36 dark:ring-amber-500/50 dark:ring-offset-neutral-950">
+            <Image
+              src="/images/san-charbel.jpg"
+              alt="San Charbel Makhlouf"
+              fill
+              priority
+              className="object-cover"
+              sizes="144px"
+            />
+          </div>
+        </div>
+        <span className="text-sm font-medium uppercase tracking-widest text-purple-600 dark:text-amber-400">
+          Bajo la intercesión de San Charbel Makhlouf
         </span>
         <h1 className="font-display max-w-2xl text-4xl font-bold text-neutral-900 sm:text-5xl dark:text-neutral-100">
           Oraciones, rituales y sabiduría para tu camino

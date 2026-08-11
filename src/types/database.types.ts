@@ -58,6 +58,95 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          sender_name: string | null
+          sender_type: string
+          thread_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          sender_name?: string | null
+          sender_type: string
+          thread_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          sender_name?: string | null
+          sender_type?: string
+          thread_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_thread_id_fkey"
+            columns: ["thread_id"]
+            isOneToOne: false
+            referencedRelation: "chat_threads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_threads: {
+        Row: {
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_phone: string | null
+          id: string
+          kit_id: string | null
+          product_id: string | null
+          status: string
+          subject: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_phone?: string | null
+          id?: string
+          kit_id?: string | null
+          product_id?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_phone?: string | null
+          id?: string
+          kit_id?: string | null
+          product_id?: string | null
+          status?: string
+          subject?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_threads_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_threads_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           author_email: string
@@ -144,6 +233,7 @@ export type Database = {
           image_url: string | null
           is_active: boolean
           name: string
+          price: number
           slug: string
         }
         Insert: {
@@ -153,6 +243,7 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           name: string
+          price?: number
           slug: string
         }
         Update: {
@@ -162,7 +253,105 @@ export type Database = {
           image_url?: string | null
           is_active?: boolean
           name?: string
+          price?: number
           slug?: string
+        }
+        Relationships: []
+      }
+      order_items: {
+        Row: {
+          id: string
+          item_type: string
+          kit_id: string | null
+          name: string
+          order_id: string
+          product_id: string | null
+          quantity: number
+          subtotal: number
+          unit_price: number
+        }
+        Insert: {
+          id?: string
+          item_type: string
+          kit_id?: string | null
+          name: string
+          order_id: string
+          product_id?: string | null
+          quantity: number
+          subtotal: number
+          unit_price: number
+        }
+        Update: {
+          id?: string
+          item_type?: string
+          kit_id?: string | null
+          name?: string
+          order_id?: string
+          product_id?: string | null
+          quantity?: number
+          subtotal?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_kit_id_fkey"
+            columns: ["kit_id"]
+            isOneToOne: false
+            referencedRelation: "kits"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          admin_notes: string | null
+          created_at: string
+          customer_email: string
+          customer_name: string
+          customer_notes: string | null
+          customer_phone: string | null
+          id: string
+          status: string
+          total: number
+          updated_at: string
+        }
+        Insert: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          customer_notes?: string | null
+          customer_phone?: string | null
+          id?: string
+          status?: string
+          total?: number
+          updated_at?: string
+        }
+        Update: {
+          admin_notes?: string | null
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          customer_notes?: string | null
+          customer_phone?: string | null
+          id?: string
+          status?: string
+          total?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -271,6 +460,7 @@ export type Database = {
           is_active: boolean
           mercado_libre_url: string | null
           name: string
+          price: number
           price_display: string | null
           slug: string
         }
@@ -282,6 +472,7 @@ export type Database = {
           is_active?: boolean
           mercado_libre_url?: string | null
           name: string
+          price?: number
           price_display?: string | null
           slug: string
         }
@@ -293,6 +484,7 @@ export type Database = {
           is_active?: boolean
           mercado_libre_url?: string | null
           name?: string
+          price?: number
           price_display?: string | null
           slug?: string
         }
@@ -479,5 +671,18 @@ export type Comment = Omit<PublicTables["comments"]["Row"], "status"> & {
 }
 export type Profile = Omit<PublicTables["profiles"]["Row"], "role"> & {
   role: "admin" | "editor"
+}
+
+export type Order = Omit<PublicTables["orders"]["Row"], "status"> & {
+  status: "pending" | "confirmed" | "fulfilled" | "cancelled"
+}
+export type OrderItem = Omit<PublicTables["order_items"]["Row"], "item_type"> & {
+  item_type: "product" | "kit"
+}
+export type ChatThread = Omit<PublicTables["chat_threads"]["Row"], "status"> & {
+  status: "open" | "answered" | "closed"
+}
+export type ChatMessage = Omit<PublicTables["chat_messages"]["Row"], "sender_type"> & {
+  sender_type: "customer" | "admin"
 }
 

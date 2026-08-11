@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { productSchema, type ProductInput } from "@/lib/validations/catalog";
-import { slugify } from "@/lib/utils";
+import { formatCurrency, slugify } from "@/lib/utils";
 import type { Product } from "@/types/database.types";
 
 export default function AdminProductsPage() {
@@ -68,7 +68,7 @@ export default function AdminProductsPage() {
             {products.map((product) => (
               <TableRow key={product.id}>
                 <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell>{product.price_display ?? "—"}</TableCell>
+                <TableCell>{product.price_display ?? (product.price > 0 ? formatCurrency(product.price) : "—")}</TableCell>
                 <TableCell>
                   <Badge variant={product.is_active ? "success" : "secondary"}>
                     {product.is_active ? "Activo" : "Inactivo"}
@@ -130,6 +130,7 @@ function ProductDialog({
       description: "",
       image_url: "",
       mercado_libre_url: "",
+      price: 0,
       price_display: "",
       is_active: true,
     },
@@ -183,7 +184,12 @@ function ProductDialog({
             <Textarea rows={3} {...register("description")} />
           </div>
           <div className="flex flex-col gap-1.5">
-            <Label>Precio (texto libre, ej. $199 MXN)</Label>
+            <Label>Precio (para el carrito)</Label>
+            <Input type="number" step="0.01" min="0" {...register("price", { valueAsNumber: true })} />
+            {errors.price && <p className="text-xs text-red-600">{errors.price.message}</p>}
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label>Precio a mostrar (opcional, ej. &quot;Desde $199 MXN&quot;)</Label>
             <Input {...register("price_display")} />
           </div>
           <div className="flex flex-col gap-1.5">

@@ -6,6 +6,40 @@
   --font-display: var(--font-playfair);
 }
 
+/*
+ * Paleta "San Charbel": sepia/café oscuro + oro antiguo, tomada del retrato
+ * histórico del santo (hábito y capucha oscuros, barba y piel en tonos
+ * sepia cálidos). Se sobreescriben los tokens de color de Tailwind
+ * (purple/amber) en vez de tocar cada componente: todo lo que ya usa
+ * `purple-*`/`amber-*` en la app hereda el nuevo tono automáticamente.
+ */
+@theme {
+  /* café oscuro — color de marca principal (antes morado) */
+  --color-purple-50: #faf6ef;
+  --color-purple-100: #f0e6d2;
+  --color-purple-200: #e0cda3;
+  --color-purple-300: #cbae76;
+  --color-purple-400: #b08d52;
+  --color-purple-500: #93713d;
+  --color-purple-600: #7a5a30;
+  --color-purple-700: #5c4326;
+  --color-purple-800: #3f2d1a;
+  --color-purple-900: #2b1d10;
+  --color-purple-950: #1a1109;
+
+  /* oro antiguo — acento sagrado (antes ámbar) */
+  --color-amber-50: #fdf8ec;
+  --color-amber-100: #f8ecc9;
+  --color-amber-200: #efd48f;
+  --color-amber-300: #e2bc6a;
+  --color-amber-400: #cda246;
+  --color-amber-600: #a67c2e;
+  --color-amber-700: #8a6420;
+  --color-amber-800: #6b4d18;
+  --color-amber-900: #4a3510;
+  --color-amber-950: #2e2009;
+}
+
 /* Contenido de posts renderizado desde Markdown */
 .prose-spiritual {
   max-width: none;
@@ -45,11 +79,11 @@
   list-style-type: decimal;
 }
 .prose-spiritual a {
-  color: var(--color-purple-700, #7e22ce);
+  color: var(--color-purple-700, #5c4326);
   text-decoration: underline;
 }
 .prose-spiritual blockquote {
-  border-left: 3px solid var(--color-purple-300, #d8b4fe);
+  border-left: 3px solid var(--color-amber-300, #e2bc6a);
   padding-left: 1rem;
   font-style: italic;
   color: var(--color-neutral-600, #525252);

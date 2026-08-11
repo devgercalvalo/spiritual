@@ -3,8 +3,10 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 
+import { ProductActions } from "@/components/public/product-actions";
 import { Button } from "@/components/ui/button";
 import { getProductBySlug } from "@/lib/data/public";
+import { formatCurrency } from "@/lib/utils";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -31,14 +33,17 @@ export default async function ProductPage({ params }: Props) {
       </div>
       <div className="flex flex-col gap-4">
         <h1 className="font-display text-3xl font-bold">{product.name}</h1>
-        {product.price_display && (
-          <p className="text-xl font-semibold text-purple-700">{product.price_display}</p>
+        {(product.price_display || product.price > 0) && (
+          <p className="text-xl font-semibold text-purple-700">
+            {product.price_display ?? formatCurrency(product.price)}
+          </p>
         )}
         {product.description && (
           <p className="text-neutral-600 dark:text-neutral-400">{product.description}</p>
         )}
+        <ProductActions product={product} />
         {product.mercado_libre_url && (
-          <Button asChild size="lg" className="w-fit">
+          <Button asChild size="lg" variant="secondary" className="w-fit">
             <a href={product.mercado_libre_url} target="_blank" rel="noopener noreferrer">
               Comprar en Mercado Libre
               <ExternalLink className="h-4 w-4" />

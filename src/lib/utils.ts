@@ -15,3 +15,7 @@ export function slugify(text: string) {
 export function formatDate(date: string | Date) {
   return format(new Date(date), "d 'de' MMMM 'de' yyyy", { locale: es });
 }
+
+export function formatCurrency(amount: number) {
+  return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(amount);
+}

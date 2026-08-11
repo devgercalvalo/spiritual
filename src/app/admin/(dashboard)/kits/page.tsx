@@ -14,7 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { kitSchema, type KitInput } from "@/lib/validations/catalog";
-import { slugify } from "@/lib/utils";
+import { formatCurrency, slugify } from "@/lib/utils";
 import type { Kit, Product } from "@/types/database.types";
 
 type KitRow = Kit & { kit_products: { product_id: string }[] };
@@ -67,6 +67,7 @@ export default function AdminKitsPage() {
           <TableHeader>
             <TableRow>
               <TableHead>Nombre</TableHead>
+              <TableHead>Precio</TableHead>
               <TableHead>Productos</TableHead>
               <TableHead>Estado</TableHead>
               <TableHead />
@@ -76,6 +77,7 @@ export default function AdminKitsPage() {
             {kits.map((kit) => (
               <TableRow key={kit.id}>
                 <TableCell className="font-medium">{kit.name}</TableCell>
+                <TableCell>{kit.price > 0 ? formatCurrency(kit.price) : "—"}</TableCell>
                 <TableCell>{kit.kit_products?.length ?? 0}</TableCell>
                 <TableCell>
                   <Badge variant={kit.is_active ? "success" : "secondary"}>
@@ -137,7 +139,7 @@ function KitDialog({
     resolver: zodResolver(kitSchema),
     defaultValues: kit
       ? { ...kit, product_ids: kit.kit_products?.map((kp) => kp.product_id) ?? [] }
-      : { name: "", slug: "", description: "", image_url: "", is_active: true, product_ids: [] },
+      : { name: "", slug: "", description: "", image_url: "", price: 0, is_active: true, product_ids: [] },
   });
 
   const imageUrl = watch("image_url");
@@ -196,6 +198,11 @@ function KitDialog({
           <div className="flex flex-col gap-1.5">
             <Label>Descripción</Label>
             <Textarea rows={3} {...register("description")} />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <Label>Precio (para el carrito)</Label>
+            <Input type="number" step="0.01" min="0" {...register("price", { valueAsNumber: true })} />
+            {errors.price && <p className="text-xs text-red-600">{errors.price.message}</p>}
           </div>
           <div className="flex flex-col gap-1.5">
             <Label>Imagen</Label>

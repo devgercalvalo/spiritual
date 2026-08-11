@@ -1,8 +1,10 @@
-# Sendero Espiritual — Plataforma de blog espiritual
+# Centro de Sanación San Charbel — Plataforma de blog espiritual
 
 MVP de una plataforma donde un sanador espiritual publica oraciones, rituales, reflexiones,
-mensajes y consejos, con comunidad de comentarios y kits que redirigen a Mercado Libre para
-la compra. Ver el brief completo del proyecto para el detalle de alcance y fases futuras.
+mensajes y consejos, con comunidad de comentarios, carrito de compras (pedido manual, sin
+cobro en línea todavía) y un chat para pedir informes sobre productos y kits. Los productos
+también pueden mostrar un link directo a Mercado Libre como alternativa de compra. Ver el
+brief completo del proyecto para el detalle de alcance y fases futuras.
 
 ## Stack
 
@@ -70,7 +72,9 @@ src/
       (dashboard)/       # dashboard, posts, comentarios, productos, kits, categorías (protegido)
     api/
       comments/           # POST público — crea comentarios en estado "pending"
-      admin/**/            # CRUD protegido (requiere sesión + role=admin)
+      orders/              # POST público — crea un pedido desde el carrito (queda "pending")
+      chat/                # POST público — abre un hilo/manda mensajes; GET por id (service role)
+      admin/**/            # CRUD protegido (requiere sesión + role=admin), incluye pedidos y mensajes
     sitemap.ts, robots.ts # SEO técnico
   components/
     public/    ui del sitio público (PostCard, ShareButtons, CommentForm, …)
@@ -86,20 +90,33 @@ src/
 ## Modelo de datos
 
 `profiles`, `categories`, `posts`, `comments`, `products`, `kits`, `kit_products` (N:N),
-`post_kits` (N:N). Detalle completo y políticas RLS en `supabase/migrations/`.
+`post_kits` (N:N), `orders`, `order_items`, `chat_threads`, `chat_messages`. Detalle completo
+y políticas RLS en `supabase/migrations/`.
 
 - Lectura pública: solo `posts` publicados, `comments` aprobados, `products`/`kits` activos.
 - Escritura: solo usuarios autenticados con `role = 'admin'` en `profiles`.
 - Comentarios: cualquiera puede insertar, siempre quedan en `status = 'pending'` hasta moderación.
+- Pedidos (`orders`/`order_items`): cualquiera puede insertar (arma su pedido desde el carrito),
+  solo admin puede leer/actualizar/borrar. El total se recalcula en el servidor a partir del
+  `price` real en base de datos, nunca se confía en lo que manda el navegador.
+- Chat (`chat_threads`/`chat_messages`): cualquiera puede insertar (abrir un hilo / mandar un
+  mensaje), pero **no hay policy de lectura pública** — la RLS solo deja leer a admin. El
+  visitante lee su propio hilo a través de `GET /api/chat/[id]`, una Route Handler que usa la
+  service role key y filtra siempre por el id exacto de la URL (modelo "quien tiene el UUID
+  del hilo puede verlo", igual que un link para compartir). Ver el comentario en
+  `supabase/migrations/20260101000005_shop_and_chat_rls.sql` para el detalle de por qué no se
+  resolvió con una policy `using (true)`.
 
 ## Alcance del MVP
 
 Incluye sitio público, blog, categorías, buscador, panel admin, login, gestión de
-publicaciones, comentarios moderados, productos, kits, redirección a Mercado Libre,
-compartir en redes y SEO básico.
+publicaciones, comentarios moderados, productos, kits, carrito de compras con pedido manual,
+chat asíncrono para pedir informes sobre un producto/kit, redirección opcional a Mercado
+Libre, compartir en redes y SEO básico.
 
-**No incluye** (fase 3): carrito, inventario, pagos, pedidos, envíos. Las compras redirigen
-a Mercado Libre (`mercado_libre_url` en cada producto).
+**No incluye todavía**: cobro en línea (pasarela de pago), inventario, envíos automatizados,
+chat en tiempo real. El carrito termina en un pedido que el equipo confirma manualmente
+(transferencia, efectivo, o Mercado Libre aparte vía `mercado_libre_url`).
 
 ## Scripts
 
@@ -115,5 +132,6 @@ pnpm supabase:types        # regenera src/types/database.types.ts
 ## Próximas fases (fuera de este MVP)
 
 - **Fase 2**: newsletter, usuarios registrados, favoritos, analíticas.
-- **Fase 3**: tienda propia con Mercado Pago, carrito, pedidos.
+- **Fase 3**: cobro en línea con Mercado Pago sobre el carrito ya existente, chat en tiempo
+  real (Supabase Realtime) en vez de polling, notificaciones por correo de pedidos/mensajes.
 - **Fase 4**: membresías, app móvil, contenido exclusivo.
