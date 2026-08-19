@@ -19,3 +19,21 @@ export function formatDate(date: string | Date) {
 export function formatCurrency(amount: number) {
   return new Intl.NumberFormat("es-MX", { style: "currency", currency: "MXN" }).format(amount);
 }
+
+const DEFAULT_SITE_URL = "http://localhost:3000";
+
+/**
+ * URL pública del sitio, usada en metadata/SEO, sitemap.xml, og:url, etc.
+ * Valida NEXT_PUBLIC_SITE_URL en vez de pasarla directo a `new URL()`: un
+ * valor mal puesto en las env vars del hosting (vacío, sin protocolo, un
+ * texto suelto) no debe tumbar el build entero — cae al default y ya.
+ */
+export function getSiteUrl() {
+  const value = process.env.NEXT_PUBLIC_SITE_URL;
+  if (!value) return DEFAULT_SITE_URL;
+  try {
+    return new URL(value).origin;
+  } catch {
+    return DEFAULT_SITE_URL;
+  }
+}

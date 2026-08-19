@@ -10,12 +10,12 @@ import { CommentForm } from "@/components/public/comment-form";
 import { CommentList } from "@/components/public/comment-list";
 import { KitRecommendation } from "@/components/public/kit-recommendation";
 import { ShareButtons } from "@/components/public/share-buttons";
-import { formatDate } from "@/lib/utils";
+import { formatDate, getSiteUrl } from "@/lib/utils";
 import { getApprovedComments, getPostBySlug } from "@/lib/data/public";
 
 type Props = { params: Promise<{ slug: string }> };
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+const siteUrl = getSiteUrl();
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;

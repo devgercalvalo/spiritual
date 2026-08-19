@@ -1,10 +1,10 @@
 import type { MetadataRoute } from "next";
 
 import { getCategories, getPublishedPosts } from "@/lib/data/public";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+import { getSiteUrl } from "@/lib/utils";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const siteUrl = getSiteUrl();
   const [posts, categories] = await Promise.all([getPublishedPosts(), getCategories()]);
 
   const staticRoutes: MetadataRoute.Sitemap = ["", "/blog", "/buscar"].map((path) => ({
